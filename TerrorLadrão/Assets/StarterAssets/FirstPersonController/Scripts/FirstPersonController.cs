@@ -64,9 +64,10 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
-	
+		public static FirstPersonController instance;
+
 #if ENABLE_INPUT_SYSTEM
-		private PlayerInput _playerInput;
+        private PlayerInput _playerInput;
 #endif
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
@@ -88,7 +89,10 @@ namespace StarterAssets
 
 		private void Awake()
 		{
-			// get a reference to our main camera
+			if (instance == null)
+			{
+				instance = this;
+			}
 			if (_mainCamera == null)
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
