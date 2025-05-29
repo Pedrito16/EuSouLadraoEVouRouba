@@ -2,10 +2,19 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum EnemyState
+{
+    Idle,
+    Patrol,
+    Searching,
+    Attack
+}
 public class EnemyAIMovement : MonoBehaviour
 {
     [SerializeField] float anguloVisão = 60;
     [SerializeField] float distanciaVisão = 10;
+    [SerializeField] EnemyState state;
+    [SerializeField] Transform[] waypoints;
     NavMeshAgent agent;
     Transform target;
     Vector3 direction;
@@ -23,10 +32,16 @@ public class EnemyAIMovement : MonoBehaviour
         {
             direction = target.position - transform.position;
             angle = Vector3.Angle(direction, transform.forward);
-            if (angle < anguloVisão / 2)
+            if (angle < anguloVisão)
             {
                 agent.SetDestination(target.position);
             }
+        }
+        switch (state)
+        {
+            case EnemyState.Idle:
+                // Lógica para estado Idle
+                break;
         }
     }
     private void OnDrawGizmos()
@@ -34,8 +49,8 @@ public class EnemyAIMovement : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, distanciaVisão);
 
-        Vector3 direcaoEsquerda = Quaternion.Euler(0, -anguloVisão / 2, 0) * transform.forward;
-        Vector3 direcaoDireita = Quaternion.Euler(0, anguloVisão / 2, 0) * transform.forward;
+        Vector3 direcaoEsquerda = Quaternion.Euler(0, -anguloVisão, 0) * transform.forward;
+        Vector3 direcaoDireita = Quaternion.Euler(0, anguloVisão, 0) * transform.forward;
 
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, direcaoEsquerda * distanciaVisão);
