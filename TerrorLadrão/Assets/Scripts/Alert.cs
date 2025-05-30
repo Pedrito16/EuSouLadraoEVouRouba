@@ -13,16 +13,14 @@ public class Alert : MonoBehaviour
     }
     void Update()
     {
-        Collider[] collider = Physics.OverlapSphere(transform.position, radius, enemyFilter);
-        if (collider != null)
+        Collider[] collider = Physics.OverlapSphere(transform.position, radius, enemyFilter);   
+        if (collider.Length > 0)
         {
-            canvasGroup.alpha = 1f;
-            interrogationPoint.SetActive(true);
+                interrogationPoint.SetActive(true);
         }
         else
         {
-            canvasGroup.alpha = 0f;
-            interrogationPoint.SetActive(false);
+                interrogationPoint.SetActive(false);
         }
     }
     private void OnDrawGizmos()
