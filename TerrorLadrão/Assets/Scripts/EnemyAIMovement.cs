@@ -15,10 +15,12 @@ public class EnemyAIMovement : MonoBehaviour
     [SerializeField] float distanciaVisão = 10;
     [SerializeField] EnemyState state;
     [SerializeField] Transform[] waypoints;
+    [SerializeField] Transform head;
     NavMeshAgent agent;
     Transform target;
     Vector3 direction;
     float angle;
+    float distance;
     void Start()
     {
         target = FirstPersonController.instance.transform;
@@ -27,10 +29,12 @@ public class EnemyAIMovement : MonoBehaviour
     }
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, target.position);
-        if(distance < distanciaVisão)
+        direction = target.position - transform.position;
+            
+        distance = Vector3.Distance(transform.position, target.position);
+        print(direction);
+        if (distance < distanciaVisão)
         {
-            direction = target.position - transform.position;
             angle = Vector3.Angle(direction, transform.forward);
             if (angle < anguloVisão)
             {
@@ -42,6 +46,13 @@ public class EnemyAIMovement : MonoBehaviour
             case EnemyState.Idle:
                 // Lógica para estado Idle
                 break;
+        }
+    }
+    private void LateUpdate()
+    {
+        if(distance < distanciaVisão)
+        {
+            head.rotation = Quaternion.LookRotation(direction);
         }
     }
     private void OnDrawGizmos()
