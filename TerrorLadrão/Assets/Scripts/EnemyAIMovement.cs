@@ -27,6 +27,7 @@ public class EnemyAIMovement : MonoBehaviour
     [SerializeField] EnemyState state;
 
     //variaveis privadas
+    PlayerLoseCondition playerLoseConditionScript;
     NavMeshAgent agent;
     Transform target;
     Vector3 direction;
@@ -38,14 +39,16 @@ public class EnemyAIMovement : MonoBehaviour
     Animator animator;
     void Start()
     {
+        playerLoseConditionScript = PlayerLoseCondition.instance;
         animator = GetComponent<Animator>();
-        originalLightColor = light.color;
-        target = FirstPersonController.instance.transform;
-        light.intensity = originalIntensity;
         agent = GetComponent<NavMeshAgent>();
+        target = FirstPersonController.instance.transform;
+
+        originalLightColor = light.color;
+        light.intensity = originalIntensity;
+
+        if(waypoints[walkingToWaypoint] != null) agent.SetDestination(waypoints[walkingToWaypoint].position);
         SwitchState(EnemyState.Patrol);
-        if(waypoints[walkingToWaypoint] != null)
-        agent.SetDestination(waypoints[walkingToWaypoint].position);
     }
     void Update()
     {
@@ -62,12 +65,14 @@ public class EnemyAIMovement : MonoBehaviour
             } else if( angle > anguloVisão && isLookingAtPlayer)
             {
                 isLookingAtPlayer = false;
+                playerLoseConditionScript.ResetCounting();
                 StartCoroutine(WaitState(EnemyState.Patrol));
             }
 
         }else if(distance >= distanciaVisão && isLookingAtPlayer)
         {
             isLookingAtPlayer = false;
+            playerLoseConditionScript.ResetCounting();
             StartCoroutine(WaitState(EnemyState.Patrol));
         }
         switch (state)
@@ -100,6 +105,7 @@ public class EnemyAIMovement : MonoBehaviour
         {
             case EnemyState.LookingAtPlayer:
                 agent.enabled = false;
+                playerLoseConditionScript.isCounting = true;
                 light.color = new Color(248, 98, 15);
                 light.intensity = 0.001f;
                 animator.SetBool("IsPatrolling", false);
