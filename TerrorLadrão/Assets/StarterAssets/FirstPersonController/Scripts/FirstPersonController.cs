@@ -2,6 +2,7 @@
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+using System.Collections;
 
 namespace StarterAssets
 {
@@ -75,6 +76,8 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
+		public bool canMove;
+		[SerializeField]public Transform cameraRoot;
 		private bool IsCurrentDeviceMouse
 		{
 			get
@@ -101,6 +104,9 @@ namespace StarterAssets
 
 		private void Start()
 		{
+			canMove = true;
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
@@ -116,13 +122,17 @@ namespace StarterAssets
 
 		private void Update()
 		{
-			JumpAndGravity();
-			GroundedCheck();
-			Move();
+            if (canMove)
+            {
+				JumpAndGravity();
+				GroundedCheck();
+				Move();
+			}
 		}
 
 		private void LateUpdate()
 		{
+			if(canMove)
 			CameraRotation();
 		}
 
@@ -269,4 +279,14 @@ namespace StarterAssets
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
 	}
+	//public IEnumerator DieAnimation(float duration)
+ //   {
+	//	float iterador = 0;
+	//	while(iterador < duration)
+ //       {
+	//		iterador += Time.deltaTime;
+	//		c
+	//		yield return null;
+ //       }
+ //   }
 }
