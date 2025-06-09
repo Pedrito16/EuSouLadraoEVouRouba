@@ -54,7 +54,7 @@ public class PlayerLoseCondition : MonoBehaviour
     IEnumerator Counting()
     {
         float countingNumber = secondsToLose;
-        countText.gameObject.SetActive(true);
+        //countText.gameObject.SetActive(true);
         while(countingNumber > 0)
         { 
             yield return new WaitForSeconds(0.1f);
@@ -64,7 +64,7 @@ public class PlayerLoseCondition : MonoBehaviour
         //abaixo segue o campo do jumpscare, tudo que acontece quando ele aparece
         isCounting = false;
 
-        countText.gameObject.SetActive(false);
+        //countText.gameObject.SetActive(false);
         StarterAssets.FirstPersonController.instance.canMove = false;
         SoundController.instance.MuteAll();
         if (jumpscare != null) jumpscare.SetActive(true);

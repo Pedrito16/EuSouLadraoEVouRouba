@@ -21,7 +21,7 @@ public class EnemyAIMovement : MonoBehaviour
     [SerializeField] float anguloVisão = 60; //angulo de raio para ter apenas o cone de visão
     [SerializeField] float distanciaVisão = 10; //distancia em que o cone pode pegar
     [SerializeField] float waitingTime = 0.85f;
-    
+    [SerializeField] bool canMove = true;
     [Header("Read-Only")]
     [SerializeField] int walkingToWaypoint;
     [SerializeField] EnemyState state;
@@ -46,9 +46,17 @@ public class EnemyAIMovement : MonoBehaviour
 
         originalLightColor = light.color;
         light.intensity = originalIntensity;
-
-        if(waypoints[walkingToWaypoint] != null) agent.SetDestination(waypoints[walkingToWaypoint].position);
-        SwitchState(EnemyState.Patrol);
+        if (waypoints[walkingToWaypoint] != null) agent.SetDestination(waypoints[walkingToWaypoint].position);
+        if (canMove)
+        {
+            agent.enabled = true;
+            SwitchState(EnemyState.Patrol);
+        }
+        else
+        {
+            state = EnemyState.Wait;
+            animator.SetBool("IsPatrolling", false);
+        }
     }
     void Update()
     {
@@ -104,7 +112,7 @@ public class EnemyAIMovement : MonoBehaviour
         switch (newState)
         {
             case EnemyState.LookingAtPlayer:
-                agent.enabled = false;
+                if(canMove) agent.enabled = false;
                 playerLoseConditionScript.isCounting = true;
                 light.color = new Color(248, 98, 15);
                 light.intensity = 0.001f;
@@ -123,7 +131,7 @@ public class EnemyAIMovement : MonoBehaviour
     {        
         yield return new WaitForSeconds(waitingTime);
         head.rotation = Quaternion.identity;
-        agent.enabled = true;
+        if(canMove) agent.enabled = true;
         light.color = originalLightColor;
         light.intensity = originalIntensity;
         if (stateToGoTo == EnemyState.Patrol) animator.SetBool("IsPatrolling", true);
