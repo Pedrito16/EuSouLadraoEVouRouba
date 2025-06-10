@@ -66,6 +66,7 @@ public class PlayerLoseCondition : MonoBehaviour
 
         //countText.gameObject.SetActive(false);
         StarterAssets.FirstPersonController.instance.canMove = false;
+        StarterAssets.FirstPersonController.instance.canUseCamera = false;
         SoundController.instance.MuteAll();
         if (jumpscare != null) jumpscare.SetActive(true);
         whiteBackground.SetActive(true);

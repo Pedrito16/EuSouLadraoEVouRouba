@@ -14,7 +14,7 @@ public class EnemyAIMovement : MonoBehaviour
     [Header("Optional")]
     [SerializeField] Transform head;
     [Tooltip("OPCIONAL: transform da cabeça do inimigo que faz a cabeça dele olhar para o player")]
-    [SerializeField] Transform[] waypoints;
+    [SerializeField] public Transform[] waypoints;
     [SerializeField] new Light light;
 
     [Header("Configurable")]

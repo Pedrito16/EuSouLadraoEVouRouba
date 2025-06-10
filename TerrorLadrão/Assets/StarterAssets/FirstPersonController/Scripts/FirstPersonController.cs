@@ -77,6 +77,7 @@ namespace StarterAssets
 		private const float _threshold = 0.01f;
 
 		public bool canMove;
+		public bool canUseCamera = true;
 		[SerializeField]public Transform cameraRoot;
 		private bool IsCurrentDeviceMouse
 		{
@@ -132,7 +133,7 @@ namespace StarterAssets
 
 		private void LateUpdate()
 		{
-			if(canMove)
+			if(canUseCamera)
 			CameraRotation();
 		}
 
