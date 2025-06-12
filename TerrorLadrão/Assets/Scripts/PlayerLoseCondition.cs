@@ -70,7 +70,6 @@ public class PlayerLoseCondition : MonoBehaviour
         SoundController.instance.MuteAll();
         if (jumpscare != null) jumpscare.SetActive(true);
         whiteBackground.SetActive(true);
-        ShakeEffect.instance.Shake(jumpscare, 3, 1);
         audioSource.clip = batemanScreaming;
         audioSource.Play();
 

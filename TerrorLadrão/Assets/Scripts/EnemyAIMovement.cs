@@ -86,7 +86,7 @@ public class EnemyAIMovement : MonoBehaviour
         switch (state)
         {
             case EnemyState.Patrol:
-                if (agent.remainingDistance <= 0.5f)
+                if (agent.remainingDistance <= 0.5f && waypoints[walkingToWaypoint] != null)
                 {
                     walkingToWaypoint++;
                     walkingToWaypoint = CheckIfShouldResetPatrol(walkingToWaypoint);
