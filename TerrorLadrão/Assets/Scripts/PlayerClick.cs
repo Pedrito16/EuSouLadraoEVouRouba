@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class PlayerClick : MonoBehaviour
 {
     [SerializeField] Transform cameraRoot;
-    public GraphicRaycaster raycaster;
+    public GraphicRaycaster[] raycaster;
     public EventSystem eventSystem;
+    int next;
     void Start()
     {
         
@@ -21,7 +22,7 @@ public class PlayerClick : MonoBehaviour
             pointerEventData.position = new Vector2(Screen.width / 2, Screen.height / 2);
 
             List<RaycastResult> results = new List<RaycastResult>();
-            raycaster.Raycast(pointerEventData, results);
+            raycaster[next].Raycast(pointerEventData, results);
 
             foreach (RaycastResult result in results)
             {
@@ -29,6 +30,7 @@ public class PlayerClick : MonoBehaviour
                 if (button != null)
                 {
                     button.onClick.Invoke();
+                    next++;
                 }
             }
         }

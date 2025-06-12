@@ -1,15 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 public class FurarScript : MonoBehaviour
 {
-    [Header("Mesh")]
-    [SerializeField] MeshFilter domeFilter;
-    [SerializeField] Mesh originalDome;
-    [SerializeField] Mesh domeWithCut;
     [Header("Canvas-related")]
-    [SerializeField] GameObject canva;
+    [SerializeField] GameObject ui;
     [SerializeField] TextMeshProUGUI pierceText;
     [SerializeField] string piercePiercingText = "Furando";
     [Space]
@@ -17,15 +14,43 @@ public class FurarScript : MonoBehaviour
     [SerializeField] float secondsToPierce;
     [Space]
     [SerializeField] Button confirmButton;
+    [SerializeField] float seeRange = 10f;
+
+    [Header("Audio")]
     [SerializeField] AudioSource sawSource;
+    [Header("Misc")]
+    [SerializeField] UnityEvent afterPierce;
+    [SerializeField] UnityEvent beforePierce;
+    MeshCollider meshCollider;
     bool endedCutting;
+    bool isCutting;
     void Start()
     {
-        domeFilter.mesh = originalDome;
+        beforePierce.Invoke();
         confirmButton.onClick.AddListener(StartPierce);
+    }
+    void Update()
+    {
+        if (endedCutting) return;
+        if (isCutting) return;
+        float distance = Vector3.Distance(transform.position, Camera.main.transform.position);
+        if(distance <= seeRange)
+        {
+            ui.SetActive(true);
+        }
+        else
+        {
+            ui.SetActive(false);
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, seeRange);
     }
     public void StartPierce()
     {
+        isCutting = true;
         StartCoroutine(dotAnimation());
         StartCoroutine(Counting());
         sawSource.Play();
@@ -58,8 +83,9 @@ public class FurarScript : MonoBehaviour
     }
     void EndCutting()
     {
+        endedCutting = true;
         sawSource.Stop();
-        canva.SetActive(false);
-        domeFilter.mesh = domeWithCut;
+        ui.SetActive(false);
+        afterPierce.Invoke();
     }
 }

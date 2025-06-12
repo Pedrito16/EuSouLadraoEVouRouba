@@ -17,7 +17,7 @@ public class LaserDie : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             FirstPersonController player = other.GetComponent<FirstPersonController>();
-            LaserScreen.instance.ShowLaserScreen(other.transform.position);
+            LaserScreen.instance.ShowLaserScreen(other.transform.position); 
             player.canMove = false;
             player.canUseCamera = true;
         }
