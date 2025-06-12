@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Collections;
@@ -34,7 +35,7 @@ public class FurarScript : MonoBehaviour
         if (endedCutting) return;
         if (isCutting) return;
         float distance = Vector3.Distance(transform.position, Camera.main.transform.position);
-        if(distance <= seeRange)
+        if (distance <= seeRange)
         {
             ui.SetActive(true);
         }
@@ -87,5 +88,14 @@ public class FurarScript : MonoBehaviour
         sawSource.Stop();
         ui.SetActive(false);
         afterPierce.Invoke();
+    }
+    public void SkipScene(float seconds)
+    {
+        StartCoroutine(WinScene(seconds));
+    }
+    IEnumerator WinScene(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene("WinScene");
     }
 }
